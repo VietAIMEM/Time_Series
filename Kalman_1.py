@@ -5,10 +5,10 @@ from pykalman import KalmanFilter
 df = pd.read_csv('train.csv')
 df_test = pd.read_csv('test.csv')
 
-df_monday = df[df['Publication_Day'] == 'Monday']
-df_test_monday = df_test[df_test['Publication_Day'] == 'Monday']
+df_3_train = df[df['Publication_Day'] == 'Monday']
+df_3_test = df_test[df_test['Publication_Day'] == 'Monday']
 
-time_series = df_monday['Listening_Time_minutes'].dropna().values
+time_series = df_3_train['Listening_Time_minutes'].dropna().values
 
 # Khởi tạo bộ lọc Kalman
 kf = KalmanFilter(
@@ -22,8 +22,8 @@ kf = KalmanFilter(
 
 state_means, state_covariances = kf.filter(time_series)
 
-if not df_test_monday.empty:
-    n_test = len(df_test_monday)
+if not df_3_test.empty:
+    n_test = len(df_3_test)
     last_state_mean = state_means[-1]
     predictions = np.ones(n_test) * last_state_mean  # Dự đoán giá trị cố định
 else:
