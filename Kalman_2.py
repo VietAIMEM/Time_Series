@@ -5,8 +5,8 @@ from pykalman import KalmanFilter
 df = pd.read_csv('train.csv')
 df_test = pd.read_csv('test.csv')
 
-df_3_train = df[df['Publication_Day'] == 'Monday']
-df_3_test = df_test[df_test['Publication_Day'] == 'Monday']
+df_3_train = df[df['Publication_Day'] == 'Wednesday']
+df_3_test = df_test[df_test['Publication_Day'] == 'Wednesday']
 
 df_3_train = df_3_train.dropna(subset=['Listening_Time_minutes', 'Episode_Length_minutes'])
 time_series = df_3_train['Listening_Time_minutes'].values
