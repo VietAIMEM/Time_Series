@@ -5,8 +5,8 @@ from pykalman import KalmanFilter
 df = pd.read_csv('train.csv')
 df_test = pd.read_csv('test.csv')
 
-df_3_train = df[df['Publication_Day'] == 'Monday']
-df_3_test = df_test[df_test['Publication_Day'] == 'Monday']
+df_3_train = df[df['Publication_Day'] == 'Wednesday']
+df_3_test = df_test[df_test['Publication_Day'] == 'Wednesday']
 
 time_series = df_3_train['Listening_Time_minutes'].dropna().values
 
@@ -25,7 +25,7 @@ state_means, state_covariances = kf.filter(time_series)
 if not df_3_test.empty:
     n_test = len(df_3_test)
     last_state_mean = state_means[-1]
-    predictions = np.ones(n_test) * last_state_mean  # Dự đoán giá trị cố định
+    predictions = np.ones(n_test) * last_state_mean
 else:
     predictions = []
 
