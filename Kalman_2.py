@@ -5,12 +5,12 @@ from pykalman import KalmanFilter
 df = pd.read_csv('train.csv')
 df_test = pd.read_csv('test.csv')
 
-df_monday = df[df['Publication_Day'] == 'Monday']
-df_test_monday = df_test[df_test['Publication_Day'] == 'Monday']
+df_3_train = df[df['Publication_Day'] == 'Monday']
+df_3_test = df_test[df_test['Publication_Day'] == 'Monday']
 
-df_monday = df_monday.dropna(subset=['Listening_Time_minutes', 'Episode_Length_minutes'])
-time_series = df_monday['Listening_Time_minutes'].values
-episode_length = df_monday['Episode_Length_minutes'].values
+df_3_train = df_3_train.dropna(subset=['Listening_Time_minutes', 'Episode_Length_minutes'])
+time_series = df_3_train['Listening_Time_minutes'].values
+episode_length = df_3_train['Episode_Length_minutes'].values
 
 observation_matrices = np.array([[[1, length]] for length in episode_length])
 
@@ -26,17 +26,17 @@ kf = KalmanFilter(
 
 state_means, state_covariances = kf.filter(time_series)
 
-if not df_test_monday.empty:
-    episode_length_test = df_test_monday['Episode_Length_minutes'].fillna(episode_length.mean()).values
-    last_state_mean = state_means[-1]  # Trạng thái cuối: [giá trị, trọng số]
+if not df_3_test.empty:
+    episode_length_test = df_3_test['Episode_Length_minutes'].fillna(episode_length.mean()).values
+    last_state_mean = state_means[-1] 
     predictions = []
     for length in episode_length_test:
-        pred = last_state_mean[0] + last_state_mean[1] * length  # Dự đoán: giá trị + trọng số * Episode_Length
+        pred = last_state_mean[0] + last_state_mean[1] * length 
         predictions.append(pred)
 else:
     predictions = []
 
-result = df_test_monday[['id']].copy()
+result = df_3_test[['id']].copy()
 result['Predicted_Listening_Time_minutes'] = predictions if len(predictions) > 0 else np.nan
 
 print("Kết quả từ mô hình Kalman với đặc trưng bổ sung:")
